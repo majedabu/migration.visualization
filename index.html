@@ -3,15 +3,17 @@
 <head>
     <title>Migrations Visu </title>
     <script type="text/javascript" src="raphael.js"></script>
-
+    <script type="text/javascript" src="jquery-ui-1.8.16.custom/js/jquery-1.6.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css" />
 </head>
 <body>
 <style type="text/css">
 
    #section-main {
+    padding-left: 70px;
     height: auto;
     background-size: 200%;
-    background: url(img/wee-migrants.jpg) repeat  center center;
+    background-color: #ffe269;
     margin-top: -20px
    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
     filter: grayscale(85%);
@@ -56,6 +58,7 @@ body{
 
 }
 
+
 </style>
 
 <section id="first">
@@ -87,15 +90,44 @@ body{
         </div>
         <div id="country_name_popup">
         <br>
-        
+
+<div id="canvas_container">
+
+        <script type="text/javascript">
+
+        var border_color="#515151";
+        var contry_color="#dbe8b9"
+        var selected_contry_color="dbe8ff" 
+
+
         var paper = new Raphael(document.getElementById('canvas_container'), 1200, 600);
 
-<script type="text/javascript">
-    
+        $.getJSON('world_svg_paths_by_code.json', function(data) {
+            svg_borders = {};
+            $.each(data, function(country, val) {
+                svg_borders[country]=[]
+                var line;
+                var i;
+                var path;
+                for (var i=0, l=val.length;i<l;i++)
+                {
+                    line = paper.path(val[i]);
+                    line.attr({stroke:border_color,'stroke-width':0.75,'fill':contry_color});
+                    line.country=country;
+                    svg_borders[country].push(line);
+                }
+            });
+            
+
+
+
+
+        });
 
 </script>
 
 
+</div>
 
 
 
