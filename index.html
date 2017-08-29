@@ -1,431 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
 <head>
-    <title>CQA</title>          
-    <link rel="stylesheet" href="styles.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="majed" content="CQA Web">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <script src= "https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"></script>
-    
-
-        
-        <script src="http://code.jquery.com/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
- <script type="text/javascript">
-
-
-
-
-
-
-   $(document).ready(function(){
-     
-
-
-function Change() // no ';' here
-{
-    var elem = document.getElementById("btn-expand");
-    if (elem.value=="expand") elem.value = "close";
-    else elem.value = "expand";
-}
-
-    
-  $("#btn-replay").click(function(user){
-      
-      alert("haha1");
-      
-      
-      $.ajax({
-        type: "POST",
-        url: "http://localhost:8080/webCQA/AnswerServlet",
-        data: { newReplay: $('#newReplay').val(), QustionsId: user}
-      
-        })
-        .done(function(data) {
-          var message = "";
-
-          $.each(data, function(index, value){
-                   });          
-          });
- 
-        });
-  });
-    
-    </script>
-
+    <title>Migrations Visu </title>
 
 </head>
-
 <body>
+<style type="text/css">
+
+   #section-main {
+    height: auto;
+    background-size: 200%;
+    background: url(img/wee-migrants.jpg) repeat  center center;
+    margin-top: -20px
+   -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+    filter: grayscale(85%);
+}
+   #country_sel_div{
+    color: black;
+    border-radius: 5px;
+    border: 5px solid gray;
+    background: lightblue;
+    margin: 25px;
+    padding: 15px;
+    font-size: 1.3em;
+    float: left;
+    height: 20px;
+}
+body{
+
+    margin-top: -20px;
+    margin-left:-10px;
+    margin-right:0px;
+    margin-bottom: : -20px;
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">CQA</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">About</a>
-                    </li>
-                    <li>
-                        <a href="#">Services</a>
-                    </li>
-                    <li>
-                        <a href="contact.html">Contact</a>
-                    </li>
-                </ul>
+}
 
+#inorout{
+    color: black;
+    border-radius: 5px;
+    border: 5px solid gray;
+    background: lightblue;
+    margin-top: 25px;
+    margin-left: 20px;
+    padding: 15px;
+    font-size: 1.3em;
+    float: left;
+    width: auto;
+    height: 20px;}
 
-        <div class="col-sm-3 col-md-3 pull-right">
-            <form class="navbar-form" role="search">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Q&A.." name="srch-term" id="srch-term">
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                    </div>
-                </div>
-            </form>
-     
-       </div>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a   href="signup.html" ><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-              <li><a href="loginin.html" onclick="myFunctionLogin()"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-            </ul>
-      </div>
-            
+#down_arrow{
 
+  transform: rotate(90deg);
 
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container -->
-    </nav>
+}
 
-
-  
-    <div class="container" id="border-fix">
-
-        <div class="row">
-            <div class="col-md-8">
-            <a href="index.html">
-            <img src="img/logo.png" class="img-circle" alt="Cinque Terre" width="300" height="110">
-            </a>
-              </div>
-            
-                <div class="col-md-4" id="border-fix">
-
-                <ul class="nav nav-pills">
-  <li class="active"><a href="#">Qustions</a></li>
-  
-  <li><a href="#">Tags</a></li>
-  <li><a href="#">Members</a></li>
-    <li><a href="askQus.html">Ask Qustion</a></li>
-
-</ul>
-          
-                   
-                </div>
-
-        </div>
-     </div>
+</style>
 
 
 
 
-    <div class="container" id="border-fix">
 
-    <h1 class="list-group-item active">Qustions</h1>
-    <div>
-
-
-    
-    <div class="modal-body">
-        <div class="tabbable"> <!-- Only required for left/right tabs -->
-        <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab1" data-toggle="tab">Popular</a></li>
-        <li><a href="#tab2" data-toggle="tab">Recent</a></li>
-        <li><a href="#tab3" data-toggle="tab">Top</a></li>
-        <li><a href="#tab4" data-toggle="tab">Unanswerd</a></li>
-        </ul>
-       
-       
-        </div>
-        </div>
-   </div>
-  
-   
-   <div class="tab-content">
-  
-
-   <div class="tab-pane active" id="tab1">
- 
-
-
-<div ng-app="ShowQst" ng-controller="showCtrl">
-<div class="container">
-<div ng-repeat="x in qsts" class="panel panel-default">
- <div class="container">
-
- <div class="row">
-<div class="question-summary narrow" id="question-summary-35657900">
-    <div onclick="window.location.href='/questions/35657900/sorting-data-into-multiple-dataframes'" class="cp">
-        <div class="votes">
-            <div class="mini-counts"><span title="0 votes">{{x.Raiting}}</span></div>
-            <div>Rating</div>
-        </div>
-    
-    </div>
-    <div class="summary">
-        
-                    <h3 class="question-hyperlink" >{{x.Content}}</h3>
-        <div class="tags t-r t-loops t-if-statement t-dataframes">
-            <a href="/questions/tagged/r" class="post-tag" title="" rel="tag">r</a> <a href="/questions/tagged/loops" class="post-tag" title="" rel="tag">loops</a> <a href="/questions/tagged/if-statement" class="post-tag" title="" rel="tag">if-statement</a> <a href="/questions/tagged/dataframes" class="post-tag" title="" rel="tag">dataframes</a> 
-        </div>
-   
-
-    </div>
-
-         <div class="started">
-            <a href="/questions/35657900/sorting-data-into-multiple-dataframes" class="started-link">asked <span title="2016-02-26 17:20:12Z" class="relativetime">{{x.Date}}</span></a>
-            <a href="" class="majd">{{x.NickName}}</a>
+<section id="first">
+    <main id=section-main>
+        <div id="country_sel_div">
+            <span id="explanation">Click on the map or pick a country here:</span>
+            <select id="country_select">
+            </select>
         </div>
 
-
-</div>
-
-
-
-
-<br>
-
-
-</div>
-
-         <div class="container">
-          
-          <h4>Top Answer:</h4>
-          {{x.topAnswer}}
+        <div id="inorout" style="width: 110px;">
+             <span id="in" class="on">
+                 <img src="img/down_arrow.gif" id="down_arrow" alt="down" height="22" width="22">
+                 <a href="#" class="blackLink">Arrivals</a>
+             </span> 
 
         </div>
-<button id="btn-expand" type="button" value="expand" onclick="Change()" class="btn btn-info" data-toggle="collapse" data-target="#demo">expand</button>
+        <div id="inorout">
 
-        <div class="col-sm-0 col-md-11">
-    <div id="demo" class="collapse">
-            
-
-<div ng-app="ShowAns" ng-controller="showCtr">
-<div class="container3">
-<div id="collapse-ans">
-<div ng-repeat="x in fadi" class="panel panel-default">
-
- 
-<div class="question-summary narrow" id="question-summary-35657900">
-    <div onclick="window.location.href='/questions/35657900/sorting-data-into-multiple-dataframes'" class="cp">
-        <div class="votes">
-             <a class="vote-up" title="ans vote up">up vote</a>
-            <div class="mini-counts"><span title="0 votes">{{x.Raiting}}</span></div>
-            <a class="vote-down" title="ans vote down">down vote</a>
+             <span id="out">
+                 <img src="img/down_arrow.gif" alt="up" height="22" width="22">
+                 <a href="#" class="blackLink">Departures</a>
+              </span>
         </div>
-    
-    </div>
-    <div class="summary">
-        
-                    <h3 class="question-hyperlink" >{{x.Content}}</h3>
-    
-   
-
-    </div>
-                  <div class="row">
-
-         <div class="started">answered at:
-           <span>{{x.Date}}</span>
-           <div>
-                      <a href="">{{x.NickName}}</a>
+        <div id="legend">
+            <h2 id="country_name"> </h2>
+            <h3 id="popsize"></h3>
+            <table id="countries" width="100%"></table>
         </div>
-           </div>
- 
-            </div>
-</div>
-
-
-
-
-</div>
-</div>  
-</div>
-
-
-
-
-           </div>
-
-        <textarea class="form-control" rows="3" name="newReplay"  id="newReplay" placeholder="Replay.."></textarea>
-        <button style="margin-bottom: 9px"  id="btn-replay" type="button"  class="btn btn-info" >Replay</button>
-
-
-
-</div>
-
-        
-</div>  
-</div>
-</div>
-</div>
-</div>
-
-
-   
-    </div>
+        <div id="country_name_popup">
 
 
 
 
 
 
-</div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
 
-</div>
-
-<div id="border-fix">
-
-<footer id="footer" class="clearfix">
-      <div id="footer-widgets">
-
-        <div class="container">
-
-        <div id="footer-wrapper">
-
-          <div class="row">
-            <div class="col-sm-6 col-md-2">
-              <div id="meta-3" class="widget widgetFooter widget_meta">
-              <h4 class="widgettitle">Importent Page :</h4>
-              <ul>
-              <li><a href="index.html"><i class="fa fa-home fa-fw"></i> Home</a></li>
-              <li><a href="privacypolicy.php"><i class="fa fa-link"></i>   Privacy Policy</a></li>
-              <li><a href="contact.html"><i class="fa fa-envelope fa-fw"></i> Contact Us</a></li>
-             </ul>
-</div>      </div> <!-- end widget1 -->
-
-            <div class="col-sm-6 col-md-2">
-                    <div id="recent-posts-3" class="widget widgetFooter widget_recent_entries">
-                    <h4 class="widgettitle">Our social media :</h4>
-                    <ul>
-                    <li>
-                     <a href="https://www.facebook.com/majed.abomoch" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
-                    </li>
-                    <li>
-                      <a href="https://www.twitter.com/" target="_blank"><i class="fa fa-twitter"></i> Twitter</a>
-                    </li>
-                    <li>
-                      <a href="https://www.youtube.com/channel/UCO5n_vsR73uACL4hTfliL3Q" target="_blank"><i class="fa fa-youtube"></i> Youtube</a>
-                   </li>
-                </ul>
-        </div>            </div> <!-- end widget1 -->
-
-            <div class="col-sm-6 col-md-4">
-              <div id="meta-4" class="widget widgetFooter widget_meta">
-              <h4 class="widgettitle">Subscribe :</h4>
-
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-addon">E-mail :</span>
-                  <input class="form-control" placeholder="Write your email .." type="text">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <div class="input-group">
-                  <span class="input-group-addon">Phone  :</span>
-                  <input class="form-control" placeholder="+9720000000000" type="text">
-                   <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button">Subscribe !</button>
-                  </span>
-                </div>
-              </div>
-
-
-              </div>
-             </div> <!-- end widget1 -->
-
-            <div class="col-sm-6 col-md-4">
-              <div id="search-3" class="widget widgetFooter widget_search"><h4 class="widgettitle">Search in CQA :</h4>
-
-                <div class="form-group">
-                                <label class="control-label">Write what you want to search for it  :</label>
-                                <div class="input-group">
-                                  <span class="input-group-addon">Keyword :</span>
-                                  <input class="form-control" placeholder="Keyword for search ..." type="text">
-                                   <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">Search !</button>
-                                  </span>
-                                </div>
-                              </div>
-
-                </div>            </div> <!-- end widget1 -->
-
-          </div> <!-- end .row -->
-
-        </div> <!-- end #footer-wrapper -->
-
-        </div> <!-- end .container -->
-      </div> <!-- end #footer-widgets -->
-
-      <div id="sub-floor">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-4 copyright">
-             Copy right for CQA © 2016
-            </div>
-            <div class="col-md-4 col-md-offset-4 attribution">
-             Developer by  <a target="_blank" href="#">CQA team</a> .
-            </div>
-          </div> <!-- end .row -->
-        </div>
-      </div>
-
-    </footer>
-          </div>
-          
-  <!--       <script type = "text/javascript">
-          
-    function inTableSearchController($scope, $http) {
-         
-alert("hahah");
-
-        
-        $http({
-            alert("alert 2");
-            url: "http://localhost:8080/webCQA/NewlySupmittedServlet",
-            method: "post" 
-                .success(function(response){ 
-            alert(response);
-            $scope.result=response;
-
-        });
-        });
-        }
-          
-    </script>
-    
- -->  
-
-
-
+        <br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>hi
+    </main>
+</section>
 </body>
-
-
 </html>
