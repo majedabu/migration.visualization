@@ -8,23 +8,27 @@
 </head>
 <body>
 <style type="text/css">
+    #header{
+       height: 130px;
+       background: url(img/1.png) repeat  center center;
 
+ 
+    }
    #section-main {
-    padding-left: 70px;
     height: auto;
     background-size: 200%;
     background-color: #ffe269;
     margin-top: -20px
    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    filter: grayscale(85%);
+    /*filter: grayscale(85%);  */
 }
    #country_sel_div{
     color: black;
     border-radius: 5px;
     border: 5px solid gray;
     background: lightblue;
-    margin: 25px;
-    padding: 15px;
+    margin-top: 45px ;margin-left:55px;margin-right:70px;
+    padding: 12px;
     font-size: 1.3em;
     float: left;
     height: 20px;
@@ -44,9 +48,9 @@ body{
     border-radius: 5px;
     border: 5px solid gray;
     background: lightblue;
-    margin-top: 25px;
-    margin-left: 20px;
-    padding: 15px;
+    margin-top: 45px;
+    margin-left: 25px;
+    padding: 12px;
     font-size: 1.3em;
     float: left;
     width: auto;
@@ -57,48 +61,60 @@ body{
   transform: rotate(90deg);
 
 }
+#canvas_container{
+    padding-left: 70px;
+}
 
+#country_name_popup {
+    color: black;
+    border-radius: 5px;
+    border: 1px solid #515151;
+    background: lightgray;
+    margin: 10px;
+    padding: 10px;
+    font-size:0.8em;
+    position:fixed;
+    display:none;
+    z-index: 102;
 
+}
 </style>
 
 <section id="first">
     <main id=section-main>
-        <div id="country_sel_div">
-            <span id="explanation">Click on the map or pick a country here:</span>
-            <select id="country_select">
-            </select>
+        <div id="header">
+            <div id="country_sel_div">
+                <span id="explanation">Click on the map or pick a country here:</span>
+                <select id="country_select">
+                </select>
+            </div>
+
+            <div id="inorout" style="width: 110px;">
+                 <span id="in" class="on">
+                     <img src="img/down_arrow.gif" id="down_arrow" alt="down" height="22" width="22">
+                     <a href="#" class="blackLink">Arrivals</a>
+                 </span> 
+
+            </div>
+            <div id="inorout">
+
+                 <span id="out">
+                     <img src="img/down_arrow.gif" alt="up" height="22" width="22">
+                     <a href="#" class="blackLink">Departures</a>
+                  </span>
+            </div>
         </div>
 
-        <div id="inorout" style="width: 110px;">
-             <span id="in" class="on">
-                 <img src="img/down_arrow.gif" id="down_arrow" alt="down" height="22" width="22">
-                 <a href="#" class="blackLink">Arrivals</a>
-             </span> 
 
-        </div>
-        <div id="inorout">
-
-             <span id="out">
-                 <img src="img/down_arrow.gif" alt="up" height="22" width="22">
-                 <a href="#" class="blackLink">Departures</a>
-              </span>
-        </div>
-        <div id="legend">
-            <h2 id="country_name"> </h2>
-            <h3 id="popsize"></h3>
-            <table id="countries" width="100%"></table>
-        </div>
-        <div id="country_name_popup">
-        <br>
 
 <div id="canvas_container">
 
         <script type="text/javascript">
 
         var border_color="#515151";
-        var contry_color="#dbe8b9"
-        var selected_contry_color="dbe8ff" 
-
+        var contry_color="#dbe8b9";
+        var selected_contry_color="00ffe8" 
+        var svg_borders;
 
         var paper = new Raphael(document.getElementById('canvas_container'), 1200, 600);
 
@@ -115,22 +131,71 @@ body{
                     line.attr({stroke:border_color,'stroke-width':0.75,'fill':contry_color});
                     line.country=country;
                     svg_borders[country].push(line);
+                    $(line.node).click(on_click(country));
+                    $(line.node).mousemove(over_mouse(country));
+                    $(line.node).mouseout(out_mouse(country));
                 }
             });
-            
-
-
-
 
         });
 
+
+        
+        function color_country(country,color,strokeColor)
+        {
+            var i;
+            var l;
+            if (svg_borders.hasOwnProperty(country))
+                for (i=0, l= svg_borders[country].length;i<l;i++)
+                {
+                    if (strokeColor)
+                        svg_borders[country][i].animate({"fill":color,"stroke":strokeColor,"stroke-width":2},333);
+                    else
+                        svg_borders[country][i].animate({"fill":color,"stroke":border_color,"stroke-width":1},333);
+                }
+        }
+
+
+        
+        function on_click(country){
+
+        }
+        
+        function over_mouse(country){
+             return function(event){
+               color_country(country,selected_contry_color);
+               var country_name =  $("#country_details");
+                country_name.empty();
+                country_name.append("<span id='popup_country_name'> "+code_to_name[country] + "</span><table width='100%'>");
+                var pop = POP[country];
+                country_name.append("<tr><th>Population</th><td style='text-align:right;'>" + pop+'</td></tr>');
+                country_name.css("display","block");
+                var canvasContainer = $("#canvas_container");
+                var canvasTop = canvasContainer.offset().top;
+                var canvasLeft = canvasContainer.offset().left;
+                if (event.pageY<canvasTop+500)
+                    country_name.css("top",event.pageY);
+                else
+                    country_name.css("top",event.pageY-170);
+                country_name.css("left",Math.min(event.pageX,canvasLeft+1200-290));
+ 
+           }         
+       }
+     
+        function out_mouse(country){
+            return function(){
+               color_country(country,contry_color);
+
+            }
+        }
+    
 </script>
 
 
 </div>
 
 
-
+<div id="country_details"></div>
 
         
         <br>
