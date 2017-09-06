@@ -12,14 +12,7 @@
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <link rel="stylesheet" type="text/css" href="main.css" /> 
     <link rel="stylesheet" href="demo.css" media="screen">
-    <script src="Jscript/pie.js"></script>
-    <style media="screen">
-    #holder {
-        margin: -90px 0 0 -750px;
-        width: 300px;
-        height: 300px;
-    }
-    </style>
+
  
 </head>
 <body>
@@ -32,11 +25,11 @@
             <select id="country_select">
             </select>
         </div>
-
+        <div id="title_div"  style="display: none;" ><h2 style="font-size:30px ">International Migration Percentage</h2></div>
         <div id="inorout" class="arrav" style="width: 110px;">
              <span id="in" class="on">
                  <img src="img/down_arrow.gif" id="down_arrow" alt="down" height="22" width="22">
-                 <a href="#" class="blackLink">Arrivals</a>
+                 <a href="#" class="bLink">Arrivals</a>
              </span> 
 
         </div>
@@ -44,12 +37,12 @@
 
              <span id="out">
                  <img src="img/down_arrow.gif" alt="up" height="22" width="22">
-                 <a href="#" class="blackLink">Departures</a>
+                 <a href="#" class="bLink">Departures</a>
               </span>
         </div>
     </div>
     <div id="container" style="display: block;">
-        <div id="canvas_container">
+        <div id="canvas_container" style="height: 590px;">
             <script type="text/javascript">
                 var sumAllArrivals=175708021
                 var svg_borders1;
@@ -222,7 +215,7 @@
                             country_name.css("top",event.pageY);
                         else
                             country_name.css("top",event.pageY-270);
-                        country_name.css("left",Math.min(event.pageX,canvasLeft+1200-290));
+                        country_name.css("left",Math.min(event.pageX,canvasLeft+1200-200));
                     }
                 }
                 function insertDecimalPoints(s)
@@ -317,7 +310,7 @@
                     });
                 }
 
-                var paper = new Raphael(document.getElementById('canvas_container'), 1200, 600);
+                var paper = new Raphael(document.getElementById('canvas_container'), 1200, 590);
 
                 $.getJSON('jsonFiles/world_svg_paths_by_code.json', function(data) {
                     svg_borders = {};
@@ -416,7 +409,9 @@
                    		 $("#country_sel_div").css("display","none"); 
                          direction='in';
                          $(".depart").css("background", "#3CBC3C");
-                         $(".arrav").css("background", "#f0f3f9");          
+                         $(".arrav").css("background", "#f0f3f9"); 
+                         $("#title_div").css("display","block");
+         
         				redraw1();
                     });
 
@@ -425,6 +420,9 @@
         	            $("#container").css("display","block");
         	            $("#container2").css("display","none");
         	            $("#country_sel_div").css("display","block");
+                        $("#title_div").css("display","none");
+
+                        
         	            redraw();
                     });
                    country_sel_div
@@ -451,12 +449,15 @@
                 <table id="countries" width="100%"></table>
         </div>
         <div id="country_name_popup"> </div>
-        <button type="button" id="main_map" style="left:550px; top:530px; position: absolute; padding: 10px;">Circle Map</button>
-
+        <button type="button" id="main_map" style="left:490px; top:500px; position: absolute; padding: 10px;">International Migration Percentage Map</button>
+        <div style="text-align: right;position: relative;top:-50px;">
+             <p><a href="mailto:majed.abumockh@gmail.com">
+                 Created by: Majed Abu Mokh</p></a>
+        </div>
     </div>
 
 
-<div id="container2" style="display: none; padding-left:120px">
+<div id="container2" style="display: none; padding-left:80px">
 
     <div id="canvas_container2">
 
@@ -610,11 +611,11 @@
                     var canvasContainer = $("#canvas_container2");
                     var canvasTop = canvasContainer.offset().top;
                     var canvasLeft = canvasContainer.offset().left;
-                    if (event.pageY<canvasTop+400)
+                    if (event.pageY<canvasTop+350)
                         country_name_.css("top",event.pageY);
                     else
-                        country_name_.css("top",event.pageY-270);
-                    country_name_.css("left",Math.min(event.pageX,canvasLeft+1200-290));
+                        country_name_.css("top",event.pageY-170);
+                    country_name_.css("left",Math.min(event.pageX,canvasLeft+1200-210));
                 }
             }
 
@@ -694,15 +695,16 @@
             });
 
         </script>
-        <button type="button" id="circle_map" style="left:610px; top:605px; position: absolute; padding: 10px;"">Back To Main</button>
-        <table id="newtable">
-            <tbody id="newtdbody">
- 
-            </tbody>
-        </table>
-        <div id="holder" style="position: absolute;"></div>
+        <div id="country_name_pop"></div>
+        <button type="button" id="circle_map" style="left:610px; top:570px; position: absolute; padding: 10px;"">Back To Main</button>
+        <div style="text-align: right;;position: relative;top:-50px; left: -79px;">
+             <p><a href="mailto:majed.abumockh@gmail.com"> 
+           Created by: Majed Abu Mokh</p></a>
+        </div>
     </div>
-    <div id="country_name_pop">
+
+
+
 </div>
 
 </body>

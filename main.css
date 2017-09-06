@@ -36,6 +36,35 @@ body {
 ol, ul {
 	list-style: none;
 }
+
+#country_sel_div{
+color: black;
+border-radius: 5px;
+border: 5px solid gray;
+background: #f0f3f9;
+margin-top: 8px ;margin-left:105px;margin-right:90px;
+padding: 12px;
+font-size: 1.3em;
+float: left;
+height: 20px;
+}
+
+
+
+#down_arrow{
+
+  transform: rotate(90deg);
+
+}
+#title_div{
+
+margin-top: 8px ;margin-left:75px;margin-right:50px;
+padding: 12px;
+font-size: 1.3em;
+float: left;
+height: 20px;
+}
+
 blockquote, q {
 	quotes: none;
 }
@@ -70,29 +99,12 @@ body {
     cursor: move;
 }
 
-#geoloc_me {
-    position : absolute;
-    top: 285px;
-    left: 10px;
-    cursor : pointer;
-}
-#social {
-    position : absolute;
-    top: 64px;
-    left: 10px;
-}
-
-#plusone {
-    position : absolute;
-    top: 10px;
-    left : 110px;
-}
 
 #countries {
     width: 100%;
 }
 
-#country_name_popup {
+#country_name_pop{
     color: black;
     border-radius: 5px;
     border: 1px solid #515151;
@@ -104,7 +116,7 @@ body {
     z-index: 102;
 
 }
-#country_name_pop{
+#country_name_popup {
     color: black;
     border-radius: 5px;
     border: 1px solid #515151;
@@ -138,7 +150,7 @@ body {
 #container{
     margin: auto;
     width:1200px;
-	height:600px;
+	height:590px;
     position: relative;
     background-color: #84acfe;
 
@@ -163,6 +175,18 @@ h2 {
     height:20px;
     /*position:absolute;*/
 }
+
+#inorout{
+    color: black;
+    border-radius: 5px;
+    border: 5px solid gray;
+    margin-top: 8px;
+    margin-left: 25px;
+    padding: 12px;
+    font-size: 1.3em;
+    float: center-left;
+    width: auto;
+    height: 20px;}
 .arrav{
 	
 	background:yellow;
@@ -174,7 +198,7 @@ h2 {
 }
 
 
-a.blackLink {
+a.bLink {
     color:black;
 	 text-decoration:none;  
 }
@@ -198,17 +222,6 @@ a {
     z-index: -10;
 }
 
-#title {
-    color: #999999;
-    float:right;
-    font-size:24px;
-    padding: 20px;
-    position:absolute;
-    top : 0px;
-    left : 969px;
-    margin: 0 0 0 0;
-    text-align: left;
-}
 
 h1 {
     display:inline;
@@ -236,25 +249,7 @@ td.country_name{
   cursor: pointer;
 }
 
-#progressbar {
-    height : 1em;
-    position:absolute;
-    witdth: 350px;
-    top: 623px;
-    left : 476px;
-    width: 450px;
-}
-#progressbarMessage {
-    height : 1em;
-    position:absolute;
-    witdth: 350px;
-    top: 625px;
-    left : 481px;
-    width: 450px;
-    font-size: 0.75em;
-    text-align: center;
 
-}
 
 #popup_country_name{
     display:block;
@@ -289,17 +284,7 @@ h3{
 
 }
 
-#country_sel_div{
-color: black;
-border-radius: 5px;
-border: 5px solid gray;
-background: #f0f3f9;
-margin-top: 8px ;margin-left:105px;margin-right:90px;
-padding: 12px;
-font-size: 1.3em;
-float: left;
-height: 20px;
-}
+
 body{
 
     margin-top: -20pyx;
@@ -310,20 +295,4 @@ body{
 
 }
 
-#inorout{
-    color: black;
-    border-radius: 5px;
-    border: 5px solid gray;
-    margin-top: 8px;
-    margin-left: 25px;
-    padding: 12px;
-    font-size: 1.3em;
-    float: center-left;
-    width: auto;
-    height: 20px;}
 
-#down_arrow{
-
-  transform: rotate(90deg);
-
-}
