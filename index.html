@@ -1,102 +1,39 @@
 <!DOCTYPE HTML>
-<html>
+<html >
 <head>
-    <title>Migrations Visu </title>
-    <script type="text/javascript" src="raphael.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="univers-else-font/stylesheet.css" />
+    <script type="text/javascript" src="Jscript/raphael.js"></script>
+    <link type="text/css" href="jquery-ui-1.8.16.custom/css/ui-darkness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
     <script type="text/javascript" src="jquery-ui-1.8.16.custom/js/jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8.16.custom/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="Jscript/signals.js"></script>
+    <script type="text/javascript" src="Jscript/hasher.js"></script>
+
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
     <link rel="stylesheet" type="text/css" href="main.css" />
+    
 </head>
 <body>
-<style type="text/css">
-    #header{
-       height: 130px;
-       background: url(img/1.png) repeat  center center;
-
- 
-    }
-   #section-main {
-    height: auto;
-    background-size: 200%;
-    background-color: #ffe269;
-    margin-top: -20px
-   -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
-    /*filter: grayscale(85%);  */
-}
-   #country_sel_div{
-    color: black;
-    border-radius: 5px;
-    border: 5px solid gray;
-    background: lightblue;
-    margin-top: 45px ;margin-left:55px;margin-right:70px;
-    padding: 12px;
-    font-size: 1.3em;
-    float: left;
-    height: 20px;
-}
-body{
-
-    margin-top: -20px;
-    margin-left:-10px;
-    margin-right:0px;
-    margin-bottom: : -20px;
-
-
-}
-
-#inorout{
-    color: black;
-    border-radius: 5px;
-    border: 5px solid gray;
-    background: lightblue;
-    margin-top: 45px;
-    margin-left: 25px;
-    padding: 12px;
-    font-size: 1.3em;
-    float: left;
-    width: auto;
-    height: 20px;}
-
-#down_arrow{
-
-  transform: rotate(90deg);
-
-}
-#canvas_container{
-    padding-left: 70px;
-}
-
-#country_name_popup {
-    color: black;
-    border-radius: 5px;
-    border: 1px solid #515151;
-    background: lightgray;
-    margin: 10px;
-    padding: 10px;
-    font-size:0.8em;
-    position:fixed;
-    display:none;
-    z-index: 102;
-
-}
-</style>
-
-<section id="first">
-    <main id=section-main>
         <div id="header">
+   		    <h2 style=" font-size:30px ; width:75px;position: absolute; top: 15px; left:1139px">People Migration</h2>
+			<img src="img/123.jpg " style="width:75px;position: absolute; top: 7px; left:1265px">
+
             <div id="country_sel_div">
-                <span id="explanation">Click on the map or pick a country here:</span>
+                <span id="explanation">Select country :</span>
                 <select id="country_select">
                 </select>
             </div>
 
-            <div id="inorout" style="width: 110px;">
+            <div id="inorout" class="arrav" style="width: 110px;">
                  <span id="in" class="on">
                      <img src="img/down_arrow.gif" id="down_arrow" alt="down" height="22" width="22">
                      <a href="#" class="blackLink">Arrivals</a>
                  </span> 
 
             </div>
-            <div id="inorout">
+            <div id="inorout" class="depart">
 
                  <span id="out">
                      <img src="img/down_arrow.gif" alt="up" height="22" width="22">
@@ -104,43 +41,89 @@ body{
                   </span>
             </div>
         </div>
-
-
+<div id="container" style="display: block;">
 
 <div id="canvas_container">
 
-        <script type="text/javascript">
 
-        var border_color="#515151";
-        var contry_color="#dbe8b9";
-        var selected_contry_color="00ffe8" 
+    <script type="text/javascript">
+        var svg_borders1;
+        var container2 ;
+        var max_arriv=34634797
+        var max_depar=12098617
+        var _colors = ["#990000","#b30000","#cc0000" , "#e60000","#ff0000", "#ff1a1a", "#ff3333","#ff4d4d","#ff6666", "#ff8080", "#ff9999","#ffb3b3"];
         var svg_borders;
+        var current_arrows=[];
+        var current_countries=[];
+        var currentCircles=[];
+        var currentCountry="PRY";
+        var previousCountry = "PRY";
+        var direction = "out";
+        var unselected_color = "#f3f2f0";
+        var selected_color = "#ccccb3";//"#67E667" ;//"#87ceeb";
+        var border_color = "#999";
+        var arrow_color = "#ffff00"//"#add8e6"; //"#fafad2";
+        var code_to_name ;
+        var name_to_code;
+        var code_to_coordinates;
+        var userLatitude;
+        var userLongitude;
+        var Cap ={};
+        var incomelevl = {};
+        var POP = {};
+        var departures_ = {};
+        var arrivals_ = {};
+        var container ;
+        var raduis_arravil={};
+        var raduis_departures={};
 
-        var paper = new Raphael(document.getElementById('canvas_container'), 1200, 600);
+        function parseHash(hash, redrawing){
+            res = the_regexp.exec(hash);
+            if (res)
+            {
+                currentCountry = res[1];
+                if (res[2]=='arrivals')
+                    direction = 'out';
+                else
+                    direction = 'in';
+            }
+            if (redrawing)
+            redraw();
+        }
 
-        $.getJSON('world_svg_paths_by_code.json', function(data) {
-            svg_borders = {};
-            $.each(data, function(country, val) {
-                svg_borders[country]=[]
-                var line;
-                var i;
-                var path;
-                for (var i=0, l=val.length;i<l;i++)
-                {
-                    line = paper.path(val[i]);
-                    line.attr({stroke:border_color,'stroke-width':0.75,'fill':contry_color});
-                    line.country=country;
-                    svg_borders[country].push(line);
-                    $(line.node).click(on_click(country));
-                    $(line.node).mousemove(over_mouse(country));
-                    $(line.node).mouseout(out_mouse(country));
-                }
-            });
+        function setHashSilently(hash){
+            hasher.changed.active = false; //disable changed signal
+            hasher.setHash(hash); //set hash without dispatching changed signal
+            hasher.changed.active = true; //re-enable signal
+        }
+        function lolatoxy(point){
+            var lo = point.longitude;
+            var la = point.latitude;
+            var x = (lo+180) * (1200 / 360.0);
+            var y = (180 - (la+90)) *  (700.0 / 180.0); 
+            return {"x":Math.floor(x),
+                    "y":Math.floor(y)
+            };
+        }
 
-        });
+        function redraw()
+        {
+            var other_direction = "in";
+            var hash_direction = "arrivals"
+            if (direction =="in")
+            {
+                other_direction = "out";
+                hash_direction = "departures";
+            }
+            setHashSilently(currentCountry+"/"+hash_direction);
+            removeCurrentDrawings();
+            $("#country_select").val(currentCountry);
+            draw_arrows_and_paint_countries();
 
-
-        
+            $("#"+direction).removeClass("on");
+            $("#"+other_direction).addClass("on")		
+		}
+                
         function color_country(country,color,strokeColor)
         {
             var i;
@@ -155,58 +138,554 @@ body{
                 }
         }
 
+        function removeCurrentDrawings()
+        {
+            color_country(previousCountry,unselected_color);
+            var i;
+            var l;
+            for (i=0,l=current_arrows.length;i<l;i++)
+                current_arrows[i].remove();
+            for (i=0,l=currentCircles.length;i<l;i++)
+                currentCircles[i].remove();
 
-        
-        function on_click(country){
-
+            current_arrows=[];
+            for(i=0,l=current_countries.length;i<l;i++)
+                color_country(current_countries[i],unselected_color);
+            current_countries=[]
         }
         
-        function over_mouse(country){
-             return function(event){
-               color_country(country,selected_contry_color);
-               var country_name =  $("#country_details");
+        function get_click_handler(country){
+            return function(){
+                previousCountry = currentCountry;
+                currentCountry = country;
+                redraw();
+            }
+        }
+        
+        function get_over_handler(country){
+            return function(event){
+                color_country(country,selected_color);
+                var country_name =  $("#country_name_popup");
+
                 country_name.empty();
                 country_name.append("<span id='popup_country_name'> "+code_to_name[country] + "</span><table width='100%'>");
-                var pop = POP[country];
+                var pop = insertDecimalPoints(parseFloat(POP[country]).toFixed(0));
+                console.log(pop);
+                if (!pop || pop=="NaN")
+                    pop = "no data";
+                
                 country_name.append("<tr><th>Population</th><td style='text-align:right;'>" + pop+'</td></tr>');
+                
+
+                var cap =Cap[country];
+                if (cap=="NaN" || !cap)
+                    cap="no data";
+                country_name.append("<tr><th>Capital</th><td style='text-align:right;'>" +cap+'</td></tr>');
+
+                var income = incomelevl[country];		
+ 			    if (income=="NaN" || !income)
+                    income="no data";
+                country_name.append("<tr><th>Income Level </th><td style='text-align:right;'>" + income+'</td></tr>');
+
+
+
+                var arriv = insertDecimalPoints(parseFloat(arrivals_[country]).toFixed(0));		
+ 			    if (arriv=="NaN" || !arriv)
+                    arriv="no data";
+                country_name.append("<tr><th>Arrivals</th><td style='text-align:right;'>" + arriv+'</td></tr>');
+
+                var depar = insertDecimalPoints(parseFloat(departures_[country]).toFixed(0));		
+ 			    if (depar=="NaN" || !depar)
+                    depar="no data";
+                country_name.append("<tr><th>Departures</th><td style='text-align:right;'>" + depar+'</td></tr>');
+
+        	
+        		var str1 = "img/flags/";
+				var str2 = country.toLowerCase();
+				var res = str1.concat(str2);
+				var src_string=res.concat(".svg");
+				console.log(src_string);
+                country_name.append("<div style=' width: 180px; text-align:center;'><img src='"+src_string+"' width='190' height='110'></div>");
+                
+
                 country_name.css("display","block");
                 var canvasContainer = $("#canvas_container");
                 var canvasTop = canvasContainer.offset().top;
                 var canvasLeft = canvasContainer.offset().left;
-                if (event.pageY<canvasTop+500)
+                if (event.pageY<canvasTop+330)
                     country_name.css("top",event.pageY);
                 else
-                    country_name.css("top",event.pageY-170);
+                    country_name.css("top",event.pageY-270);
                 country_name.css("left",Math.min(event.pageX,canvasLeft+1200-290));
- 
-           }         
-       }
-     
-        function out_mouse(country){
-            return function(){
-               color_country(country,contry_color);
-
             }
         }
-    
-</script>
+        function insertDecimalPoints(s)
+        {
+            var l = s.length;
+            var res = ""+s[0];
+            for (var i=1;i<l-1;i++)
+            {
+                if ((l-i)%3==0)
+                    res+= ".";
+                res+=s[i];
+            }
+            res+=s[l-1];
+            return res;
+        }
+        function get_out_handler(country){
+            return function(event){
+                var found=false;
+                var i;
+                var l;
+                var country_name = $("#country_name_popup");
+                country_name.css("display","none");
+                for (i=0,l=current_countries.length;i<l;i++)
+                {
+                    if (country === current_countries[i])
+                    {
+                        found=true;
+                        break;
+                    }
+                }
+                if (country==currentCountry)
+                    color_country(country,selected_color,'gray');
+                else if (found)
+                  color_country(country,_colors[i])
+                else
+                    color_country(country,unselected_color);
+            }
+        }
+        
+        function draw_arrows_and_paint_countries()
+        {
 
+            $.getJSON("generated/"+direction+currentCountry+".json", function(data) {
+                var countries_div = $("#countries");
+                var country_name_div = $("#country_name");
+                countries_div.empty();
+                country_name_div.empty()
+                $("#popsize").empty();
+                var str1 = "img/flags/";
+				var str2 = currentCountry.toLowerCase();
+				var res = str1.concat(str2);
+				var src_string=res.concat(".svg");
+				console.log(src_string);
+                country_name_div.append("<img src='"+src_string+"' width='35' height='30' style='padding-right:8px;'>");
+                country_name_div.append(code_to_name[currentCountry]);
+
+                if(direction=="in")
+					arrow_color="#3CBC3C"; 
+				else        
+					arrow_color="#FFFF50"; 
+         
+                var counter =0;
+                $.each(data, function(country, val) {
+                    var line;
+                    var i;
+                    var l;
+                    var path;
+                    line = paper.path(val[0]);
+                    countries_div.append("<tr><td><div class=color_span style='height:1em;width:1em;background-color:"+_colors[counter] +" '>&nbsp;&nbsp;&nbsp;</div></td><td class='country_name' value='"+name_to_code[val[1]] +"'>"+val[1]+'</td><td style="text-align: right;">'+insertDecimalPoints(val[2])+"</td></tr>")
+                    line.animate({stroke:arrow_color,'stroke-width':2,'opacity':3},2333);
+                	if(direction=="in")
+                   	    line.attr({ 'arrow-end':   'classic-wide-long'});
+					else    {    
+                 	    line.attr({ 'arrow-start':   'classic-wide-long'}); 
+                 	    var coo = code_to_coordinates[country];
+                	    var circle = paper.circle(coo[0], coo[1], 2);
+	                    circle.attr("stroke", arrow_color);
+	                    circle.attr("fill", arrow_color);
+	                    currentCircles.push(circle);  
+
+                    }
+                    current_arrows.push(line);
+                    color_country(country,_colors[counter]);
+                    current_countries.push(country);
+                	
+                    counter++;
+
+                     
+                });
+
+                color_country(currentCountry,selected_color,arrow_color);
+            });
+        }
+
+        var paper = new Raphael(document.getElementById('canvas_container'), 1200, 600);
+
+        $.getJSON('jsonFiles/world_svg_paths_by_code.json', function(data) {
+            svg_borders = {};
+            $.each(data, function(country, val) {
+                svg_borders[country]=[]
+                var line;
+                var i;
+                var path;
+                for (var i=0, l=val.length;i<l;i++)
+                {
+                    line = paper.path(val[i]);
+                    line.attr({stroke:border_color,'stroke-width':1,'fill':unselected_color});
+                    line.country=country;
+                    $(line.node).click( get_click_handler(country));
+                    $(line.node).mousemove( get_over_handler(country));
+                    $(line.node).mouseout( get_out_handler(country));
+
+                    svg_borders[country].push(line);
+                }
+            });
+             $.getJSON("jsonFiles/name_to_code.json", function(data) {
+                 name_to_code = data;
+             });
+             $.getJSON("jsonFiles/capital.json", function(data) {
+                 Cap = data;
+             });
+            $.getJSON("jsonFiles/incomeLevel.json", function(data) {
+                 incomelevl = data;
+             });
+            $.getJSON("jsonFiles/code_to_arrivals.json", function(data) {
+                 arrivals_ = data;
+             });
+            $.getJSON("jsonFiles/code_to_departures.json", function(data) {
+                 departures_ = data;
+             });
+            $.getJSON("jsonFiles/code_To_raduis_department.json", function(data) {
+                 raduis_departures = data;
+             });
+            $.getJSON("jsonFiles/code_To_raduis_arravil.json", function(data) {
+                 raduis_arravil = data;       
+             });     
+            $.getJSON("jsonFiles/POP.json", function(data) {
+                 POP = data;
+             });
+
+             $.getJSON("jsonFiles/code_to_name.json", function(data) {
+                 code_to_name = data;
+                 var country_select = $("#country_select");
+                 $.each(data, function(code, name) {
+                     var selected='';
+                     if (code=="BEL")
+                        selected='selected="selected"';
+                     country_select.append("<option value='"+code+"'" +selected+">"+name+'</option>');
+                 });
+                 country_select.change(function(e){
+                    previousCountry = currentCountry;
+                    currentCountry = $(this).val();
+                    redraw();
+                 });
+                 //draw_arrows_and_paint_countries();
+             });
+            $.getJSON("jsonFiles/code_to_coordinates.json", function(data) {
+                code_to_coordinates = data;
+                redraw();
+            });
+
+
+        });
+        $(function(){
+
+            container = $("#container");
+            $("#in").click(function(e){
+               e.preventDefault();
+               direction='out';
+               $(".arrav").css("background", "#FFFF50");
+               $(".depart").css("background", "#f0f3f9");
+
+               redraw();
+               redraw1();
+
+            });
+            $("#out").click(function(e){
+               e.preventDefault();
+               direction='in';
+               $(".depart").css("background", "#3CBC3C");
+               $(".arrav").css("background", "#f0f3f9");
+
+               redraw();
+               redraw1();
+          
+            });
+            $("#main_map").click(function(e){
+               e.preventDefault();
+           		 $("#container").css("display","none");
+           		 $("#container2").css("display","block"); 
+           		 $("#country_sel_div").css("display","none"); 
+                 direction='in';
+                 $(".depart").css("background", "#3CBC3C");
+                 $(".arrav").css("background", "#f0f3f9");          
+				redraw1();
+            });
+
+            $("#circle_map").click(function(e) {
+            	 e.preventDefault();
+	            $("#container").css("display","block");
+	            $("#container2").css("display","none");
+	            $("#country_sel_div").css("display","block");
+	            redraw();
+            });
+           country_sel_div
+            $('#legend').draggable();
+            $("#legend").delegate(".country_name","click",function(e){
+                previousCountry = currentCountry;
+                currentCountry = $(this).attr("value");
+                redraw();
+            });
+            $("#legend").delegate(".country_name","mouseenter",function(e){
+                $(this).css("background","blue");
+            });
+            $("#legend").delegate(".country_name","mouseleave",function(e){
+                $(this).css("background","none");
+            });
+
+
+
+
+
+        });
+
+
+
+    </script>
+
+    
+</div>
+
+<div id="legend">
+    <h2 id="country_name"></h2>
+        <table id="countries" width="100%"></table>
+</div>
+<div id="country_name_popup">
+</div>
+<button type="button" id="main_map" style="left:550px; top:530px; position: absolute; padding: 10px;">Circle Map</button>
 
 </div>
 
+<div id="container2" style="display: none; padding-left:120px">
 
-<div id="country_details"></div>
 
+<div id="canvas_container2">
+
+
+    <script type="text/javascript">
+
+
+        function parseHash(hash, redrawing){
+            res = the_regexp.exec(hash);
+            if (res)
+            {
+                currentCountry = res[1];
+                if (res[2]=='arrivals')
+                    direction = 'out';
+                else
+                    direction = 'in';
+            }
+            if (redrawing)
+            redraw1();
+        }
+
+
+        function draw_circle_countries()
+        {
+
+            if(direction=="out"){
+                arrow_color="#FFFF50"; 
+                for (countr in code_to_coordinates){
+                    var coo = code_to_coordinates[countr];
+                    var circle = paper2.circle(coo[0], coo[1], (arrivals_[countr]/max_arriv)*40);
+                    circle.attr("stroke", "gray");
+                    circle.attr("fill", arrow_color);
+                    currentCircles.push(circle);
+                    }  
+                
+
+            }
+            else{
+                arrow_color="#3CBC3C";
+                for (countr in code_to_coordinates){
+                    console.log(countr)
+                    var coo = code_to_coordinates[countr];
+                    var circle = paper2.circle(coo[0], coo[1], (departures_[countr]/max_depar)*28);
+                    circle.attr("stroke", "gray");
+                    circle.attr("fill", arrow_color);
+                    currentCircles.push(circle);  
+                }
+
+           }
+       }
+
+             
+        function removeDrawings()
+        {
+            var i;
+  
+            for (i=0,l=currentCircles.length;i<l;i++)
+                currentCircles[i].remove();
+
+        }
+        function redraw1()
+        {
+            var other_direction = "in";
+            var hash_direction = "arrivals"
+            if (direction =="in")
+            {
+                other_direction = "out";
+                hash_direction = "departures";
+            }
+            setHashSilently(currentCountry+"/"+hash_direction);
+            removeDrawings();
+            $("#country_select").val(currentCountry);
+            draw_circle_countries();
+
+            $("#"+direction).removeClass("on");
+            $("#"+other_direction).addClass("on")   
+		
+        }
+                
         
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        function get_click_(country){
+            return function(){
+                previousCountry = currentCountry;
+                currentCountry = country;
+                redraw1();
+            }
+        }
+        
+        function get_over_(country){
+            return function(event){
+                color_country1(country,selected_color);s
+                var country_name =  $("#country_name_pop");
 
-        <br>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>hi
-    </main>
-</section>
+                country_name.empty();
+                country_name.append("<span id='popup_country_name'> "+code_to_name[country] + "</span><table width='100%'>");
+                var pop = insertDecimalPoints(parseFloat(POP[country]).toFixed(0));
+                console.log(pop);
+                if (!pop || pop=="NaN")
+                    pop = "no data";
+                
+                country_name.append("<tr><th>Population</th><td style='text-align:right;'>" + pop+'</td></tr>');
+                
+
+                var cap =Cap[country];
+                if (cap=="NaN" || !cap)
+                    cap="no data";
+                country_name.append("<tr><th>Capital</th><td style='text-align:right;'>" +cap+'</td></tr>');
+
+                var income = incomelevl[country];		
+ 			    if (income=="NaN" || !income)
+                    income="no data";
+                country_name.append("<tr><th>Income Level </th><td style='text-align:right;'>" + income+'</td></tr>');
+
+
+
+                var arriv = insertDecimalPoints(parseFloat(arrivals_[country]).toFixed(0));		
+ 			    if (arriv=="NaN" || !arriv)
+                    arriv="no data";
+                country_name.append("<tr><th>Arrivals</th><td style='text-align:right;'>" + arriv+'</td></tr>');
+
+                var depar = insertDecimalPoints(parseFloat(departures_[country]).toFixed(0));		
+ 			    if (depar=="NaN" || !depar)
+                    depar="no data";
+                country_name.append("<tr><th>Departures</th><td style='text-align:right;'>" + depar+'</td></tr>');
+
+        	
+        		var str1 = "img/flags/";
+				var str2 = country.toLowerCase();
+				var res = str1.concat(str2);
+				var src_string=res.concat(".svg");
+				console.log(src_string);
+                country_name.append("<div style=' width: 180px; text-align:center;'><img src='"+src_string+"' width='190' height='110'></div>");
+                
+
+                country_name.css("display","block");
+                var canvasContainer = $("#canvas_container2");
+                var canvasTop = canvasContainer.offset().top;
+                var canvasLeft = canvasContainer.offset().left;
+                if (event.pageY<canvasTop+400)
+                    country_name.css("top",event.pageY);
+                else
+                    country_name.css("top",event.pageY-270);
+                country_name.css("left",Math.min(event.pageX,canvasLeft+1200-290));
+            }
+        }
+
+
+        function get_out_(country){
+            return function(){
+    
+                var country_name = $("#country_name_pop");
+                country_name.css("display","none");
+
+                if (country==currentCountry)
+                    color_country1(country,unselected_color);
+
+                else
+                    color_country1(country,unselected_color);
+            }
+        }
+        
+                
+        function color_country1(country,color,strokeColor)
+        {
+            var i;
+            var l;
+            if (svg_borders1.hasOwnProperty(country))
+                for (i=0, l= svg_borders1[country].length;i<l;i++)
+                {
+                    if (strokeColor)
+                        svg_borders1[country][i].animate({"fill":color,"stroke":strokeColor,"stroke-width":2},333);
+                    else
+                        svg_borders1[country][i].animate({"fill":color,"stroke":border_color,"stroke-width":1},333);
+                }
+        }
+
+        var paper2 = new Raphael(document.getElementById('canvas_container2'), 1200, 600);
+
+        $.getJSON('jsonFiles/world_svg_paths_by_code.json', function(data) {
+            svg_borders1 = {};
+            $.each(data, function(country, val) {
+                svg_borders1[country]=[]
+                var line;
+                var i;
+                var path;
+                for (var i=0, l=val.length;i<l;i++)
+                {
+                    line = paper2.path(val[i]);
+                    line.attr({stroke:border_color,'stroke-width':1,'fill':unselected_color});
+                    line.country=country;
+                    $(line.node).click( get_click_(country));
+                    $(line.node).mousemove( get_over_(country));
+                    $(line.node).mouseout( get_out_(country));
+
+                    svg_borders1[country].push(line);
+                }
+            });
+            $.getJSON("jsonFiles/code_to_name.json", function(data) {
+                 code_to_name = data;
+                 var country_select = $("#country_select");
+                 $.each(data, function(code, name) {
+                     var selected='';
+                     if (code=="BEL")
+                        selected='selected="selected"';
+                     country_select.append("<option value='"+code+"'" +selected+">"+name+'</option>');
+                 });
+                 country_select.change(function(e){
+                    previousCountry = currentCountry;
+                    currentCountry = $(this).val();
+                    redraw1();
+                 });
+                 //draw_arrows_and_paint_countries();
+             });
+            $.getJSON("jsonFiles/code_to_coordinates.json", function(data) {
+                code_to_coordinates = data;
+                redraw1();
+            });
+
+            
+        });
+
+    </script>
+<button type="button" id="circle_map" style="left:610px; top:605px; position: absolute; padding: 10px;"">Back To Main</button>
+</div>
+
+<div id="country_name_pop">
+</div>
 </body>
 </html>
