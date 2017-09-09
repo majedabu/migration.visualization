@@ -74,6 +74,7 @@
                 var arrivals_ = {};
                 var container ;
                 var raduis_arravil={};
+                var GDP={};
                 var raduis_departures={};
 
                 function parseHash(hash, redrawing){
@@ -186,7 +187,12 @@
                             income="no data";
                         country_name.append("<tr><th>Income Level </th><td style='text-align:right;'>" + income+'</td></tr>');
 
-
+                        var gdp = insertDecimalPoints(parseFloat(GDP[country]).toFixed(0)) ;
+                        if (gdp && !isNaN(gdp))
+                            gdp = '$ '+gdp;
+                        else
+                            gdp ="no data";
+                        country_name.append("<tr><th>GDP per capita</th><td style='text-align:right;'>" + gdp+'</td></tr>');
 
                         var arriv = insertDecimalPoints(parseFloat(arrivals_[country]).toFixed(0));		
          			    if (arriv=="NaN" || !arriv)
@@ -354,6 +360,9 @@
                      });     
                     $.getJSON("jsonFiles/POP.json", function(data) {
                          POP = data;
+                     });
+                    $.getJSON("jsonFiles/GDP.json", function(data) {
+                         GDP = data;
                      });
 
                      $.getJSON("jsonFiles/code_to_name.json", function(data) {
@@ -586,6 +595,12 @@
                         income="no data";
                     country_name_.append("<tr><th>Income Level </th><td style='text-align:right;'>" + income+'</td></tr>');
 
+                    var gdp = insertDecimalPoints(parseFloat(GDP[country]).toFixed(0)) ;
+                    if (gdp && !isNaN(gdp))
+                        gdp = '$ '+gdp;
+                    else
+                        gdp ="no data";
+                    country_name.append("<tr><th>GDP per capita</th><td style='text-align:right;'>" + gdp+'</td></tr>');
 
 
                     var arriv = insertDecimalPoints(parseFloat(arrivals_[country]).toFixed(0));		
