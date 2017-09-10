@@ -59,6 +59,7 @@ code_to_name = f.read()
 code_to_name = json.dumps(json.loads(code_to_name)) 	
 code_to_name=ast.literal_eval(code_to_name)
 getIndicator("SH.DYN.MORT","POP")
+getIndicator("NY.GDP.PCAP.CD","GDP")
 getincomeLevel("incomeLevel")
 getCapital("capital")
 
